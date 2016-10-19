@@ -13,19 +13,13 @@ ConsoleRenderer::ConsoleRenderer(int width, int height)
 
 void ConsoleRenderer::initRendering(int *argc, char** argv) {
 
-	cout << "initRendering" << endl;
-
 }
 
 void ConsoleRenderer::createRenderingWindow(const char* title) {
 
-	cout << "createRenderingWindow: " << title << endl;
-
 }
 
 void ConsoleRenderer::renderScene() {
-
-	cout << "renderScene" << endl;
 
 	// C++11 auto and range
 	for (auto s : m_shapes)

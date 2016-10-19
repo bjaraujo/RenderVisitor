@@ -57,7 +57,7 @@ void OpenGLRenderer::display()
 	// setup 2d pixel plotting camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0f, (GLfloat)m_width, 0.0f, (GLfloat)m_height, 0.0f, 1.0f);
+	glOrtho(0.0f, (GLfloat)m_width, 0, (GLfloat)m_height, 0.0f, 1.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glViewport(0, 0, m_width, m_height);
@@ -113,6 +113,21 @@ void OpenGLRenderer::reshape(int width, int height)
 
 	m_width = width;
 	m_height = height;
+
+	/*
+	//set viewport to window dimensions
+	glViewport(0, 0, m_width, m_height);
+
+	//Reset corrdinate system
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	//Establish clipping volume (left,right,bottom,near,far)
+	glOrtho(0.0f, (GLfloat)m_width, 0.0f, (GLfloat)m_height, 0.0f, 1.0f);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	*/
 
 }
 

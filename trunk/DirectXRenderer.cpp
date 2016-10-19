@@ -168,13 +168,15 @@ void DirectXRenderer::draw(geo::Rectangle* aRectangle)
 	LPDIRECT3DVERTEXBUFFER9 p_dx_VertexBuffer;
 
 	// 2 3 1 4
+	int permutation[] = { 1, 2, 0, 3 };
+
 	for (size_t i = 0; i < aRectangle->nbVertices(); i++)
 	{
-		cv_Vertices[(i + 1) % 4].x = (float)aRectangle->vertex(i).x();
-		cv_Vertices[(i + 1) % 4].y = (float)aRectangle->vertex(i).y();
-		cv_Vertices[(i + 1) % 4].z = 0;
-		cv_Vertices[(i + 1) % 4].weight = 1;
-		cv_Vertices[(i + 1) % 4].color = (((int)(aRectangle->color().r() * 255) & 0xff) << 16) | (((int)(aRectangle->color().g() * 255) & 0xff) << 8) | ((int)(aRectangle->color().b() * 255) & 0xff);
+		cv_Vertices[i].x = (float)aRectangle->vertex(permutation[i]).x();
+		cv_Vertices[i].y = (float)aRectangle->vertex(permutation[i]).y();
+		cv_Vertices[i].z = 0;
+		cv_Vertices[i].weight = 1;
+		cv_Vertices[i].color = (((int)(aRectangle->color().r() * 255) & 0xff) << 16) | (((int)(aRectangle->color().g() * 255) & 0xff) << 8) | ((int)(aRectangle->color().b() * 255) & 0xff);
 	}
 
 	m_pDevice->CreateVertexBuffer(aRectangle->nbVertices() * sizeof(OURCUSTOMVERTEX), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &p_dx_VertexBuffer, NULL);
