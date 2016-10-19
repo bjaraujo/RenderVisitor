@@ -22,7 +22,6 @@ private:
 
 	static LRESULT CALLBACK ourWindowProcedure(HWND han_Wind, UINT uint_Message, WPARAM parameter1, LPARAM parameter2);
 	LPDIRECT3DDEVICE9 initializeDevice(HWND han_WindowToBindTo);
-	LPDIRECT3DVERTEXBUFFER9 fillVertices(HWND han_Window, LPDIRECT3DDEVICE9 p_dx_Device);
 	void drawScene();
 
 public:

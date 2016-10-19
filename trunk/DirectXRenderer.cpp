@@ -64,49 +64,6 @@ LPDIRECT3DDEVICE9 DirectXRenderer::initializeDevice(HWND han_WindowToBindTo)
 	return p_dx_Device;
 }
 
-LPDIRECT3DVERTEXBUFFER9 DirectXRenderer::fillVertices(HWND han_Window, LPDIRECT3DDEVICE9 p_dx_Device)
-{
-
-	OURCUSTOMVERTEX cv_Vertices[3];
-	LPDIRECT3DVERTEXBUFFER9 p_dx_VertexBuffer;
-
-	cv_Vertices[0].x = 150;
-	cv_Vertices[0].y = 100;
-	cv_Vertices[0].z = 0;
-	cv_Vertices[0].weight = 1;
-	cv_Vertices[0].color = 0xffff0000;
-
-	cv_Vertices[1].x = 350;
-	cv_Vertices[1].y = 100;
-	cv_Vertices[1].z = 0;
-	cv_Vertices[1].weight = 1;
-	cv_Vertices[1].color = 0xff00ff00;
-
-	cv_Vertices[2].x = 250;
-	cv_Vertices[2].y = 300;
-	cv_Vertices[2].z = 0;
-	cv_Vertices[2].weight = 1;
-	cv_Vertices[2].color = 0xff00ffff;
-
-	if (FAILED(p_dx_Device->CreateVertexBuffer(3 * sizeof(OURCUSTOMVERTEX), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &p_dx_VertexBuffer, NULL)))
-	{
-		MessageBox(han_Window, "Error while creating VertexBuffer", "fillVertices()", MB_OK);
-	}
-
-	VOID* p_Vertices;
-	if (FAILED(p_dx_VertexBuffer->Lock(0, 3 * sizeof(OURCUSTOMVERTEX), (void**)&p_Vertices, 0)))
-	{
-		MessageBox(han_Window, "Error trying to lock", "fillVertices()", MB_OK);
-	}
-	else{
-		memcpy(p_Vertices, cv_Vertices, 3 * sizeof(OURCUSTOMVERTEX));
-		p_dx_VertexBuffer->Unlock();
-	}
-
-	return p_dx_VertexBuffer;
-
-}
-
 void DirectXRenderer::createRenderingWindow(const char* title) {
 
 
@@ -131,7 +88,6 @@ void DirectXRenderer::createRenderingWindow(const char* title) {
 		0, 0, DirectXRenderer::m_width, DirectXRenderer::m_height, NULL, NULL, GetModuleHandle(NULL), NULL);
 
 	m_pDevice = initializeDevice(m_han_Window);
-	m_pdx_VB = fillVertices(m_han_Window, m_pDevice);
 
 }
 
@@ -211,13 +167,14 @@ void DirectXRenderer::draw(geo::Rectangle* aRectangle)
 	OURCUSTOMVERTEX cv_Vertices[4];
 	LPDIRECT3DVERTEXBUFFER9 p_dx_VertexBuffer;
 
+	// 2 3 1 4
 	for (size_t i = 0; i < aRectangle->nbVertices(); i++)
 	{
-		cv_Vertices[i].x = (float)aRectangle->vertex(i).x();
-		cv_Vertices[i].y = (float)aRectangle->vertex(i).y();
-		cv_Vertices[i].z = 0;
-		cv_Vertices[i].weight = 1;
-		cv_Vertices[i].color = (((int)(aRectangle->color().r() * 255) & 0xff) << 16) | (((int)(aRectangle->color().g() * 255) & 0xff) << 8) | ((int)(aRectangle->color().b() * 255) & 0xff);
+		cv_Vertices[(i + 1) % 4].x = (float)aRectangle->vertex(i).x();
+		cv_Vertices[(i + 1) % 4].y = (float)aRectangle->vertex(i).y();
+		cv_Vertices[(i + 1) % 4].z = 0;
+		cv_Vertices[(i + 1) % 4].weight = 1;
+		cv_Vertices[(i + 1) % 4].color = (((int)(aRectangle->color().r() * 255) & 0xff) << 16) | (((int)(aRectangle->color().g() * 255) & 0xff) << 8) | ((int)(aRectangle->color().b() * 255) & 0xff);
 	}
 
 	m_pDevice->CreateVertexBuffer(aRectangle->nbVertices() * sizeof(OURCUSTOMVERTEX), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &p_dx_VertexBuffer, NULL);
