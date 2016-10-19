@@ -1,6 +1,4 @@
 
-#include <iostream>
-
 #include <GL/glut.h>
 
 #include "OpenGLRenderer.h"

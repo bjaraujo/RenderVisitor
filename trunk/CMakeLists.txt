@@ -10,6 +10,7 @@ Rectangle.h
 Triangle.h
 Renderer.h
 OpenGLRenderer.h
+ConsoleRenderer.h
 )
 
 SET(RENDERERVISITOR_SOURCES
@@ -18,8 +19,8 @@ Vertex.cpp
 Shape.cpp
 Rectangle.cpp
 Triangle.cpp
-Renderer.cpp
 OpenGLRenderer.cpp
+ConsoleRenderer.cpp
 main.cpp
 )
 

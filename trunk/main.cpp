@@ -1,15 +1,52 @@
 
 #include <iostream>
+#include <thread>
 
 #include "Triangle.h"
 #include "Rectangle.h"
+
 #include "OpenGLRenderer.h"
+#include "ConsoleRenderer.h"
 
 int OpenGLRenderer::m_width = 0;
 int OpenGLRenderer::m_height = 0;
 
 std::vector<geo::Shape*> Renderer::m_shapes;
+
 OpenGLRenderer* OpenGLRenderer::m_renderer = NULL;
+ConsoleRenderer* ConsoleRenderer::m_renderer = NULL;
+
+void renderToOpenGL(int argc, char* argv[], const char *title)
+{
+
+	// OpenGL
+	OpenGLRenderer anOpenGLRenderer(480, 480);
+
+	OpenGLRenderer::m_renderer = &anOpenGLRenderer;
+
+	anOpenGLRenderer.initRendering(&argc, argv);
+
+	anOpenGLRenderer.createRenderingWindow(title);
+
+	anOpenGLRenderer.renderScene();
+
+}
+
+void renderToConsole(int argc, char* argv[], const char *title)
+{
+
+	// Console
+	ConsoleRenderer aConsoleRenderer(480, 480);
+
+	ConsoleRenderer::m_renderer = &aConsoleRenderer;
+
+	aConsoleRenderer.initRendering(&argc, argv);
+
+	aConsoleRenderer.createRenderingWindow(title);
+
+	aConsoleRenderer.renderScene();
+
+}
 
 int main(int argc, char* argv[])
 {
@@ -24,18 +61,14 @@ int main(int argc, char* argv[])
 	geo::Rectangle aRectangle(150, 50, 100, 200);
 	aRectangle.setColor(geo::Color(0.0, 0.0, 1.0));
 
-	OpenGLRenderer anOpenGLRenderer(480, 480);
+	Renderer::m_shapes.push_back(&aTriangle);
+	Renderer::m_shapes.push_back(&aRectangle);
 
-	OpenGLRenderer::m_renderer = &anOpenGLRenderer;
+	std::thread t1(renderToOpenGL, argc, argv, "OpenGL");
+	std::thread t2(renderToConsole, argc, argv, "Console");
 
-	anOpenGLRenderer.addShape(&aTriangle);
-	anOpenGLRenderer.addShape(&aRectangle);
-
-	anOpenGLRenderer.initRendering(&argc, argv);
-
-	anOpenGLRenderer.createRenderingWindow("OpenGL Visitor Pattern Demo");
-
-	anOpenGLRenderer.renderScene();
+	t1.join();
+	t2.join();
 
 	return 0;
 

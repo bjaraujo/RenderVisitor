@@ -11,14 +11,10 @@ namespace geo
 }
 
 class Renderer {
-
-protected:
 	
-	static std::vector<geo::Shape*> m_shapes;
-
 public:
 
-	static void addShape(geo::Shape* aShape);
+	static std::vector<geo::Shape*> m_shapes;
 	
 	virtual void draw(geo::Triangle* aTriangle) = 0;
 	virtual void draw(geo::Rectangle* aRectangle) = 0;
