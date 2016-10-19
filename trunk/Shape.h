@@ -21,6 +21,7 @@ namespace geo
 		virtual void draw(Renderer* aRenderer) = 0;
 		
 		void addVertex(double x, double y);
+		size_t nbVertices();
 		Vertex vertex(const int anIndex);
 
 		void setColor(Color aColor);

@@ -17,6 +17,13 @@ namespace geo
 
 	}
 
+	size_t Shape::nbVertices()
+	{
+
+		return m_vertices.size();
+
+	}
+
 	Vertex Shape::vertex(const int anIndex)
 	{
 

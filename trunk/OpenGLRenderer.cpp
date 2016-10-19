@@ -1,6 +1,4 @@
 
-#include <GL/glut.h>
-
 #include "OpenGLRenderer.h"
 
 OpenGLRenderer::OpenGLRenderer(int width, int height)
@@ -88,10 +86,9 @@ void OpenGLRenderer::draw(geo::Triangle* aTriangle)
 	glColor3d(aTriangle->color().r(), aTriangle->color().g(), aTriangle->color().b());
 
 	glBegin(GL_TRIANGLES);
-	
-	glVertex2d(aTriangle->vertex(0).x(), aTriangle->vertex(0).y());
-	glVertex2d(aTriangle->vertex(1).x(), aTriangle->vertex(1).y());
-	glVertex2d(aTriangle->vertex(2).x(), aTriangle->vertex(2).y());
+
+	for (size_t i = 0; i < aTriangle->nbVertices(); i++)
+		glVertex2d(aTriangle->vertex(i).x(), aTriangle->vertex(i).y());
 
 	glEnd();
 
@@ -104,10 +101,8 @@ void OpenGLRenderer::draw(geo::Rectangle* aRectangle)
 
 	glBegin(GL_QUADS);
 
-	glVertex2d(aRectangle->vertex(0).x(), aRectangle->vertex(0).y());
-	glVertex2d(aRectangle->vertex(1).x(), aRectangle->vertex(1).y());
-	glVertex2d(aRectangle->vertex(2).x(), aRectangle->vertex(2).y());
-	glVertex2d(aRectangle->vertex(3).x(), aRectangle->vertex(3).y());
+	for (size_t i = 0; i < aRectangle->nbVertices(); i++)
+		glVertex2d(aRectangle->vertex(i).x(), aRectangle->vertex(i).y());
 
 	glEnd();
 

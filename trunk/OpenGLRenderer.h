@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <GL/glut.h>
+
 #include "Shape.h"
 #include "Triangle.h"
 #include "Rectangle.h"

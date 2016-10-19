@@ -10,6 +10,7 @@ Rectangle.h
 Triangle.h
 Renderer.h
 OpenGLRenderer.h
+DirectXRenderer.h
 ConsoleRenderer.h
 )
 
@@ -20,6 +21,7 @@ Shape.cpp
 Rectangle.cpp
 Triangle.cpp
 OpenGLRenderer.cpp
+DirectXRenderer.cpp
 ConsoleRenderer.cpp
 main.cpp
 )
@@ -40,4 +42,8 @@ ADD_EXECUTABLE(RendererVisitor ${RENDERERVISITOR_HEADERS} ${RENDERERVISITOR_SOUR
 TARGET_LINK_LIBRARIES(RendererVisitor 
 ${OPENGL_LIBRARIES}
 ${GLUT_LIBRARY}
+d3d9
+ddraw 
+dinput8 
+dxguid  
 )
