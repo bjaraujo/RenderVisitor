@@ -99,7 +99,7 @@ void DirectXRenderer::drawScene()
 
 	// C++11 auto and range
 	for (auto s : DirectXRenderer::m_shapes)
-		DirectXRenderer::drawShape(s);
+		DirectXRenderer::drawShape(s.get());
 
 	m_pDevice->EndScene();
 	m_pDevice->Present(NULL, NULL, NULL, NULL);

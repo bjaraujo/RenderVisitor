@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <thread>
+#include <memory>
 
 #include "Triangle.h"
 #include "Rectangle.h"
@@ -15,79 +16,50 @@ int OpenGLRenderer::m_height = 0;
 int DirectXRenderer::m_width = 0;
 int DirectXRenderer::m_height = 0;
 
-std::vector<geo::Shape*> Renderer::m_shapes;
+std::vector<std::shared_ptr<geo::Shape> > Renderer::m_shapes;
 
-OpenGLRenderer* OpenGLRenderer::m_renderer = NULL;
-DirectXRenderer* DirectXRenderer::m_renderer = NULL;
-ConsoleRenderer* ConsoleRenderer::m_renderer = NULL;
+OpenGLRenderer* OpenGLRenderer::m_renderer = nullptr;
+DirectXRenderer* DirectXRenderer::m_renderer = nullptr;
+ConsoleRenderer* ConsoleRenderer::m_renderer = nullptr;
 
-void renderToOpenGL(int argc, char* argv[], const char *title)
+void renderTo(std::shared_ptr<Renderer> aRenderer, int argc, char* argv[], const char *title)
 {
 
-	// OpenGL
-	OpenGLRenderer anOpenGLRenderer(480, 480);
+	aRenderer->initRendering(&argc, argv);
 
-	OpenGLRenderer::m_renderer = &anOpenGLRenderer;
+	aRenderer->createRenderingWindow(title);
 
-	anOpenGLRenderer.initRendering(&argc, argv);
-
-	anOpenGLRenderer.createRenderingWindow(title);
-
-	anOpenGLRenderer.renderScene();
-
-}
-
-void renderToDirectX(int argc, char* argv[], const char *title)
-{
-
-	// DirectX
-	DirectXRenderer aDirectXRenderer(480, 480);
-
-	DirectXRenderer::m_renderer = &aDirectXRenderer;
-
-	aDirectXRenderer.initRendering(&argc, argv);
-
-	aDirectXRenderer.createRenderingWindow(title);
-
-	aDirectXRenderer.renderScene();
-
-}
-
-void renderToConsole(int argc, char* argv[], const char *title)
-{
-
-	// Console
-	ConsoleRenderer aConsoleRenderer(480, 480);
-
-	ConsoleRenderer::m_renderer = &aConsoleRenderer;
-
-	aConsoleRenderer.initRendering(&argc, argv);
-
-	aConsoleRenderer.createRenderingWindow(title);
-
-	aConsoleRenderer.renderScene();
+	aRenderer->renderScene();
 
 }
 
 int main(int argc, char* argv[])
 {
 
-	geo::Triangle aTriangle;
+	auto aTriangle = std::make_shared<geo::Triangle>();
+	aTriangle->addVertex(50, 50);
+	aTriangle->addVertex(120, 150);
+	aTriangle->addVertex(50, 200);
+	aTriangle->setColor(geo::Color(1.0, 1.0, 0.0));
 
-	aTriangle.setColor(geo::Color(1.0, 1.0, 0.0));
-	aTriangle.addVertex(50, 50);
-	aTriangle.addVertex(120, 150);
-	aTriangle.addVertex(50, 200);
+	auto aRectangle = std::make_shared<geo::Rectangle>(150, 50, 100, 200);
+	aRectangle->setColor(geo::Color(0.0, 0.0, 1.0));
 
-	geo::Rectangle aRectangle(150, 50, 100, 200);
-	aRectangle.setColor(geo::Color(0.0, 0.0, 1.0));
+	Renderer::m_shapes.push_back(aTriangle);
+	Renderer::m_shapes.push_back(aRectangle);
 
-	Renderer::m_shapes.push_back(&aTriangle);
-	Renderer::m_shapes.push_back(&aRectangle);
+	auto anOpenGLRenderer = std::make_shared<OpenGLRenderer>(480, 480);
+	OpenGLRenderer::m_renderer = anOpenGLRenderer.get();
 
-	std::thread t1(renderToOpenGL, argc, argv, "OpenGL");
-	std::thread t2(renderToDirectX, argc, argv, "DirectX");
-	std::thread t3(renderToConsole, argc, argv, "Console");
+	auto aDirectXRenderer = std::make_shared<DirectXRenderer>(480, 480);
+	DirectXRenderer::m_renderer = aDirectXRenderer.get();
+
+	auto aConsoleRenderer = std::make_shared<ConsoleRenderer>(480, 480);
+	ConsoleRenderer::m_renderer = aConsoleRenderer.get();
+
+	std::thread t1(renderTo, anOpenGLRenderer, argc, argv, "OpenGL");
+	std::thread t2(renderTo, aDirectXRenderer, argc, argv, "DirectX");
+	std::thread t3(renderTo, aConsoleRenderer, argc, argv, "Console");
 
 	t1.join();
 	t2.join();

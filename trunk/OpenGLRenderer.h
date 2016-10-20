@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #include "Shape.h"
 #include "Triangle.h"

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 
 namespace geo
@@ -11,11 +12,11 @@ namespace geo
 }
 
 class Renderer {
-	
+
 public:
 
-	static std::vector<geo::Shape*> m_shapes;
-	
+	static std::vector<std::shared_ptr<geo::Shape> > m_shapes;
+
 	virtual void draw(geo::Triangle* aTriangle) = 0;
 	virtual void draw(geo::Rectangle* aRectangle) = 0;
 

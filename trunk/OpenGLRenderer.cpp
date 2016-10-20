@@ -65,7 +65,7 @@ void OpenGLRenderer::display()
 
 	// C++11 auto and range
 	for (auto s : m_shapes)
-		drawShape(s);
+		drawShape(s.get());
 
 	glPopMatrix();
 
